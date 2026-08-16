@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        // 1. Define your destination base URL
+        const targetBase = 'https://arctic-shift.carversworkbench.com/'; // Replace with your target
+
+        // 2. Grab everything after the '?' in the current URL
+        const queryString = window.location.search;
+
+        // 3. Combine them and redirect instantly
+        const finalUrl = targetBase + queryString;
+        window.location.replace(finalUrl);
+    </script>
+</head>
+<body>
+    <p>Redirecting... If you are not redirected, <a id="fallback" href="#">click here</a>.</p>
+    <script>
+        // Fallback safety net
+        document.getElementById('fallback').href = targetBase + window.location.search;
+        document.getElementById('fallback').innerText = targetBase + window.location.search;
+    </script>
+</body>
+</html>
