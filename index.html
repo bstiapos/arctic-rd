@@ -2,25 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Redirecting...</title>
+    <title>Redirecting to Arctic Shift...</title>
     <script>
-        // 1. Define your destination base URL
-        const targetBase = 'https://arctic-shift.photon-reddit.com'; // Replace with your target
+        // 1. Base URL for Arctic Shift search
+        const targetHost = 'https://arctic-shift.photon-reddit.com/search';
 
-        // 2. Grab everything after the '?' in the current URL
+        // 2. Grab the raw incoming query string
         const queryString = window.location.search;
+        let finalUrl = targetHost;
 
-        // 3. Combine them and redirect instantly
-        const finalUrl = targetBase + queryString;
+        if (queryString) {
+            // Strip the leading '?' for easier manipulation
+            let cleanParams = queryString.startsWith('?') ? queryString.substring(1) : queryString;
+
+            // Check if the user explicitly provided a 'fun' parameter (e.g., comments_search or ids)
+            // If they didn't, default to 'posts_search' so standard queries still work.
+            if (!cleanParams.includes('fun=')) {
+                cleanParams = 'fun=posts_search&' + cleanParams;
+            }
+
+            finalUrl += '?' + cleanParams;
+        } else {
+            // Absolute fallback if someone visits your GitHub page with zero parameters at all
+            finalUrl += '?fun=posts_search';
+        }
+
+        // 3. Execute the redirect immediately
         window.location.replace(finalUrl);
     </script>
 </head>
 <body>
-    <p>Redirecting... If you are not redirected, <a id="fallback" href="#">click here</a>.</p>
+    <p>Redirecting to Arctic Shift... If you are not redirected automatically, <a id="fallback" href="#">click here</a>.</p>
     <script>
-        // Fallback safety net
-        document.getElementById('fallback').href = targetBase + window.location.search;
-        document.getElementById('fallback').innerText = targetBase + window.location.search;
+        // Dynamic fallback link generation
+        document.getElementById('fallback').href = finalUrl;
+        document.getElementById('fallback').innerText = finalUrl;
     </script>
 </body>
 </html>
